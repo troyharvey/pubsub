@@ -1,0 +1,30 @@
+{
+    "name": "generationtux/google-pubsub",
+    "description": "Google Pub/Sub push queue Iron.io alternative for Lumen, Laravel, and PHP.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Troy Harvey",
+            "email": "troy.harvey@generationtux.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "google/apiclient": "^2.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~4.1",
+        "mockery/mockery": "0.9.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "GenTux\\GooglePubSub\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "GenTux\\GooglePubSub\\Tests\\": "tests/"
+        }
+    }
+}
