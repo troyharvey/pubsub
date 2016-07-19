@@ -5,9 +5,8 @@ namespace GenTux\GooglePubSub\Tests;
 use GenTux\GooglePubSub\PubSubMessage;
 use GenTux\GooglePubSub\Tests\Stubs\AccountsCustomerCreatedMessage;
 use Mockery;
-use PHPUnit_Framework_TestCase;
 
-class PubSubMessageTest extends PHPUnit_Framework_TestCase
+class PubSubMessageTest extends \PHPUnit_Framework_TestCase
 {
     /** @var PubSubMessage */
     protected $message;

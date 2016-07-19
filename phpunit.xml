@@ -22,4 +22,8 @@
             <directory suffix=".php">./src</directory>
         </whitelist>
     </filter>
+    <php>
+        <env name="APP_ENV" value="testing"/>
+        <env name="GOOGLE_PUB_SUB_SUBSCRIBER_TOKEN" value="7RWfH4zxnXXsep5g3LpVxv7xSlnhyFPFeHda87i3Vc"/>
+    </php>
 </phpunit>

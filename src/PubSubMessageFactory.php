@@ -15,6 +15,10 @@ class PubSubMessageFactory
         $this->messages = $messages;
     }
 
+//1. Check the security token on the pub sub message (throws InvalidSecurityToken)
+//2. Make message from routing key (throws InvalidRoutingKey)
+//3. Handle message
+
     /**
      * @param Request $request
      * @throws PubSubRoutingKeyException

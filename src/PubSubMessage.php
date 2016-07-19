@@ -40,6 +40,10 @@ abstract class PubSubMessage
     }
 
 
+    /**
+     * Publish this message to the PubSub Topic.
+     * @param mixed $data
+     */
     public function publish($data)
     {
         $client = new Google_Client();
@@ -68,6 +72,11 @@ abstract class PubSubMessage
         );
     }
 
+    /**
+     * Handle inbound PubSub message.
+     * @param Request $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
     public function handle(Request $request)
     {
         if ($request->input('token') != env('GOOGLE_PUB_SUB_SUBSCRIBER_TOKEN')) {
