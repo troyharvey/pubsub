@@ -12,18 +12,18 @@ abstract class PubSubMessage
 {
     /** @var string environment App::environment() */
     protected $environment;
+
     /** @var string project Google project slug */
     protected $project;
+
     /** @var string routingKey Message routing key. e.g.  */
     protected static $routingKey;
+
     /** @var string version Message version */
     protected $version = 'v1';
+
     /** @var string entity Noun. Entity (or Object type). e.g. customer, tuxedo, shirt, or cart-item. */
     protected $entity;
-    /** @var string event Verb. Description of what happened to the entity. e.g. created, updated, deleted. */
-    protected $event;
-    /** @var string messageData Payload of the PubSub message. */
-    protected $messageData;
 
     public function __construct($environment, $project)
     {
@@ -32,16 +32,24 @@ abstract class PubSubMessage
     }
 
     /**
-     * @return string
+     * The Pub Sub Routing Key is a message attribute. For example, "Customer Created"
+     * is a system event. The PubSub Topic is the Customer entity - `production-v1-customer`.
+     * The Routing Key includes the verb - `created`, `updated`, `deleted`. For example:
+     *
+     *      accounts.customer.created
+     *
+     * @param string $routingKey
+     * @return bool
      */
-    public static function routingKey()
+    public static function handles($routingKey)
     {
-        return static::$routingKey;
+        return strcasecmp(static::$routingKey, $routingKey) == 0;
     }
 
 
     /**
      * Publish this message to the PubSub Topic.
+     *
      * @param mixed $data
      */
     public function publish($data)
@@ -74,28 +82,18 @@ abstract class PubSubMessage
 
     /**
      * Handle inbound PubSub message.
-     * @param Request $request
-     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     *
+     * @param string $messageData Decoded message.data attribute.
      */
-    public function handle(Request $request)
-    {
-        if ($request->input('token') != env('GOOGLE_PUB_SUB_SUBSCRIBER_TOKEN')) {
-            return response('', 403);
-        }
-        $data = $request->all();
-        $messageId = array_get($data, 'message.message_id');
-        $message = app($request->input('message.attributes.routingKey'));
-        $message->setData($data);
-        $message->validate();
-        $message->handle();
-
-        return response('', 204);
-    }
+    abstract public function handle($messageData);
 
     /**
      * PubSub message Topic name following this convention:
+     *
      *   {environment}-{version}-{entity}
+     *
      * Override for customized topic names.
+     *
      * @return string
      */
     public function topic()

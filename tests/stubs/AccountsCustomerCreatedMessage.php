@@ -9,5 +9,10 @@ class AccountsCustomerCreatedMessage extends PubSubMessage
     protected static $routingKey = 'accounts.customer.created';
     protected $version = 'v1';
     protected $entity = 'customer';
-    protected $event = 'created';
+
+    
+    public function handle($messageData)
+    {
+        return;
+    }
 }

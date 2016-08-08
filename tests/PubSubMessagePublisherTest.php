@@ -6,7 +6,7 @@ use GenTux\GooglePubSub\PubSubMessage;
 use GenTux\GooglePubSub\Tests\Stubs\AccountsCustomerCreatedMessage;
 use Mockery;
 
-class PubSubMessageTest extends \PHPUnit_Framework_TestCase
+class PubSubMessagePublisherTest extends \PHPUnit_Framework_TestCase
 {
     /** @var PubSubMessage */
     protected $message;
@@ -22,9 +22,10 @@ class PubSubMessageTest extends \PHPUnit_Framework_TestCase
     }
 
     /** @test */
-    public function it_has_a_routing_key()
+    public function it_statically_handles_a_routing_key()
     {
-        $this->assertEquals('accounts.customer.created', AccountsCustomerCreatedMessage::routingKey());
+        $this->assertTrue(AccountsCustomerCreatedMessage::handles('accounts.customer.created'));
+        $this->assertFalse(AccountsCustomerCreatedMessage::handles('accounts.customer.deleted'));
     }
 
     /** @test */
