@@ -9,7 +9,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
 use Mockery;
 
-class PubSubMessageHandlerTest extends \PHPUnit_Framework_TestCase
+class PubSubMessageSubscriberTest extends \PHPUnit_Framework_TestCase
 {
 
     /** @var Application */
@@ -34,7 +34,7 @@ class PubSubMessageHandlerTest extends \PHPUnit_Framework_TestCase
             ->with('queue.connections.pubsub.project')
             ->andReturn('pubsub-demo');
 
-        $this->messageHandler = new PubSubMessageSubscriber($this->app, $this->config);
+        $this->messageSubscriber = new PubSubMessageSubscriber($this->app, $this->config);
     }
 
 
@@ -55,7 +55,7 @@ class PubSubMessageHandlerTest extends \PHPUnit_Framework_TestCase
             ]
         );
         
-        $this->messageHandler->handle(
+        $this->messageSubscriber->read(
             $request,
             [
                 AccountsCustomerCreatedMessage::class,

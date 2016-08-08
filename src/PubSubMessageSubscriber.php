@@ -30,7 +30,7 @@ class PubSubMessageSubscriber
      *
      * @throws PubSubRoutingKeyException
      */
-    public function handle(Request $request, array $messages)
+    public function read(Request $request, array $messages)
     {
         /** @var String $routingKey */
         $routingKey = $request->get('message.attributes.routingKey');
