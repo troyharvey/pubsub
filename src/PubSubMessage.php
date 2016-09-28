@@ -2,21 +2,25 @@
 
 namespace GenTux\GooglePubSub;
 
-use Google_Client;
-use Google_Service_Pubsub;
-use Google_Service_Pubsub_PublishRequest;
-use Google_Service_Pubsub_PubsubMessage;
-use Illuminate\Http\Request;
-
+/**
+ * @property string $environment
+ * @property string $project
+ * @property string $version
+ * @property string $entity
+ */
 abstract class PubSubMessage
 {
+
+    /** @var string data */
+    protected $data;
+
     /** @var string environment App::environment() */
     protected $environment;
 
     /** @var string project Google project slug */
     protected $project;
 
-    /** @var string routingKey Message routing key. e.g.  */
+    /** @var string routingKey Message routing key. e.g. accounts.customer.created */
     protected static $routingKey;
 
     /** @var string version Message version */
@@ -46,46 +50,22 @@ abstract class PubSubMessage
         return strcasecmp(static::$routingKey, $routingKey) == 0;
     }
 
-
-    /**
-     * Publish this message to the PubSub Topic.
-     *
-     * @param mixed $data
-     */
-    public function publish($data)
-    {
-        $client = new Google_Client();
-        $client->useApplicationDefaultCredentials();
-        $client->setScopes([Google_Service_Pubsub::PUBSUB]);
-
-        /** @var Google_Service_Pubsub pubsub */
-        $pubsub = new Google_Service_Pubsub($client);
-
-        /** @var Google_Service_Pubsub_PubsubMessage $message */
-        $message = new Google_Service_Pubsub_PubsubMessage();
-
-        $json = json_encode($data);
-        $message->setData(base64_encode($json));
-        $message->setAttributes([
-            'routingKey' => static::$routingKey
-        ]);
-
-        /** @var Google_Service_Pubsub_PublishRequest $request */
-        $request = new Google_Service_Pubsub_PublishRequest();
-        $request->setMessages([$message]);
-
-        $pubsub->projects_topics->publish(
-            "projects/{$this->project}/topics/{$this->topic()}",
-            $request
-        );
-    }
-
     /**
      * Handle inbound PubSub message.
      *
      * @param string $messageData Decoded message.data attribute.
      */
     abstract public function handle($messageData);
+
+    /**
+     * Routing key for the message.
+     *
+     * @return string
+     */
+    public function routingKey()
+    {
+        return self::$routingKey;
+    }
 
     /**
      * PubSub message Topic name following this convention:
@@ -113,5 +93,33 @@ abstract class PubSubMessage
         }
 
         return join('-', $nubs);
+    }
+
+    /**
+     * @param $name
+     * @return null | mixed
+     */
+    public function __get($name)
+    {
+        return isset($this->$name) ? $this->$name : null;
+    }
+
+    /**
+     * @param $property
+     * @param $value
+     */
+    public function __set($property, $value)
+    {
+        if (property_exists($this, $property)) {
+            $this->$property = $value;
+        }
+    }
+    /**
+     * @param $property
+     * @return bool
+     */
+    public function __isset($property)
+    {
+        return property_exists($this, $property) && $this->$property != null;
     }
 }
