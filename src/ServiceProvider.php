@@ -18,6 +18,11 @@ class ServiceProvider extends BaseServiceProvider
                 __DIR__.'/config.php' => config_path('pubsub.php'),
             ]
         );
+
+        $this->app->bind(
+            \GenTux\GooglePubSub\Contracts\PubSub::class,
+            \GenTux\GooglePubSub\Drivers\Google\PubSub::class
+        );
     }
 
     /**

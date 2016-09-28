@@ -6,7 +6,7 @@ use GenTux\GooglePubSub\Exceptions\PubSubRoutingKeyException;
 use GenTux\GooglePubSub\PubSubMessage;
 use Illuminate\Http\Request;
 
-interface PubSubDriver
+interface PubSub
 {
     /**
      * @param PubSubMessage $message

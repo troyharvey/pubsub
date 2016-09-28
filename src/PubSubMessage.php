@@ -2,9 +2,13 @@
 
 namespace GenTux\GooglePubSub;
 
+
+use GenTux\GooglePubSub\Exceptions\PubSubHandlerNotDefinedException;
+
 /**
- * @property string $environment
+ * @property string $data
  * @property string $project
+ * @property string $routingKey
  * @property string $version
  * @property string $entity
  */
@@ -14,26 +18,17 @@ abstract class PubSubMessage
     /** @var string data */
     protected $data;
 
-    /** @var string environment App::environment() */
-    protected $environment;
-
     /** @var string project Google project slug */
     protected $project;
 
     /** @var string routingKey Message routing key. e.g. accounts.customer.created */
-    protected static $routingKey;
+    public static $routingKey;
 
     /** @var string version Message version */
     protected $version = 'v1';
 
     /** @var string entity Noun. Entity (or Object type). e.g. customer, tuxedo, shirt, or cart-item. */
     protected $entity;
-
-    public function __construct($environment, $project)
-    {
-        $this->environment = $environment;
-        $this->project = $project;
-    }
 
     /**
      * The Pub Sub Routing Key is a message attribute. For example, "Customer Created"
@@ -54,17 +49,11 @@ abstract class PubSubMessage
      * Handle inbound PubSub message.
      *
      * @param string $messageData Decoded message.data attribute.
+     * @throws PubSubHandlerNotDefinedException
      */
-    abstract public function handle($messageData);
-
-    /**
-     * Routing key for the message.
-     *
-     * @return string
-     */
-    public function routingKey()
+    public function handle($messageData)
     {
-        return self::$routingKey;
+        throw new PubSubHandlerNotDefinedException("Define a custom pub sub message handler for {get_class()}");
     }
 
     /**
@@ -80,8 +69,8 @@ abstract class PubSubMessage
     {
         $nubs = [];
 
-        if (!empty($this->environment)) {
-            $nubs[] = $this->environment;
+        if (!empty($this->environment())) {
+            $nubs[] = $this->environment();
         }
 
         if (!empty($this->version)) {
@@ -93,6 +82,16 @@ abstract class PubSubMessage
         }
 
         return join('-', $nubs);
+    }
+
+    /**
+     * String representing the current environment.
+     *
+     * @return string
+     */
+    public function environment()
+    {
+        return app()->environment();
     }
 
     /**

@@ -3,9 +3,9 @@
 namespace GenTux\GooglePubSub\Drivers\Amazon;
 
 
-use GenTux\GooglePubSub\Contracts\PubSubDriver;
+use GenTux\GooglePubSub\Contracts\PubSub;
 
-class Sns implements PubSubDriver
+class Sns implements PubSub
 {
 
 }

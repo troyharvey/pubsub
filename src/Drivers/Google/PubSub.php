@@ -3,7 +3,6 @@
 namespace GenTux\GooglePubSub\Drivers\Google;
 
 
-use GenTux\GooglePubSub\Contracts\PubSubDriver;
 use GenTux\GooglePubSub\PubSubMessage;
 use Google_Client;
 use Google_Service_Pubsub;
@@ -14,7 +13,7 @@ use Illuminate\Config\Repository;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
 
-class PubSub implements PubSubDriver
+class PubSub implements \GenTux\GooglePubSub\Contracts\PubSub
 {
     /** @var Application */
     protected $app;
@@ -43,7 +42,7 @@ class PubSub implements PubSubDriver
         $json = json_encode($message->data);
         $pubSubMessage->setData(base64_encode($json));
         $pubSubMessage->setAttributes([
-            'routingKey' => $message->routingKey()
+            'routingKey' => $message::$routingKey
         ]);
 
         /** @var Google_Service_Pubsub_PublishRequest $request */
@@ -51,7 +50,7 @@ class PubSub implements PubSubDriver
         $request->setMessages([$pubSubMessage]);
 
         $pubsub->projects_topics->publish(
-            "projects/{$message->project}/topics/{$message->topic()}",
+            "projects/{$this->config->get('queue.connections.pubsub.project')}/topics/{$message->topic()}",
             $request
         );
     }
@@ -66,13 +65,9 @@ class PubSub implements PubSubDriver
             if ($messageClass::handles($routingKey)) {
 
                 /** @var PubSubMessage $message */
-                $message = new $messageClass(
-                    $this->app->environment(),
-                    $this->config->get('queue.connections.pubsub.project')
+                return new $messageClass(
+                    base64_decode($request->get('message.data'))
                 );
-
-                $message->data = base64_decode($request->get('message.data'));
-                return $message;
             }
         }
 
