@@ -2,7 +2,6 @@
 
 namespace GenTux\GooglePubSub;
 
-use GenTux\GooglePubSub\Console\Commands\AddGoogleSite;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 
 class ServiceProvider extends BaseServiceProvider
@@ -28,10 +27,6 @@ class ServiceProvider extends BaseServiceProvider
      */
     public function register()
     {
-        $this->commands([
-            AddGoogleSite::class,
-        ]);
-        
         $this->mergeConfigFrom(__DIR__.'/config.php', 'queue.connections.pubsub');
     }
 }
