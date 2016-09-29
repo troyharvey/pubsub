@@ -48,12 +48,11 @@ abstract class PubSubMessage
     /**
      * Handle inbound PubSub message.
      *
-     * @param string $messageData Decoded message.data attribute.
      * @throws PubSubHandlerNotDefinedException
      */
-    public function handle($messageData)
+    public function handle()
     {
-        throw new PubSubHandlerNotDefinedException("Define a custom pub sub message handler for {get_class()}");
+        throw PubSubHandlerNotDefinedException::forMessage(get_class($this));
     }
 
     /**

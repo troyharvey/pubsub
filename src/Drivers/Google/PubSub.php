@@ -59,18 +59,18 @@ class PubSub implements \GenTux\GooglePubSub\Contracts\PubSub
     public function subscribe(Request $request, array $messages)
     {
         /** @var String $routingKey */
-        $routingKey = $request->get('message.attributes.routingKey');
+        $routingKey = $request->input('message.attributes.routingKey');
 
         foreach ($messages as $messageClass) {
             if ($messageClass::handles($routingKey)) {
 
                 /** @var PubSubMessage $message */
                 return new $messageClass(
-                    base64_decode($request->get('message.data'))
+                    base64_decode($request->input('message.data'))
                 );
             }
         }
 
-        throw new PubSubRoutingKeyException($routingKey);
+        throw PubSubRoutingKeyException::forThis($request);
     }
 }
