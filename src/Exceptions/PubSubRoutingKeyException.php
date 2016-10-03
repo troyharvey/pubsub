@@ -16,12 +16,17 @@ class PubSubRoutingKeyException extends \Exception
     {
         $input = json_encode($request->all());
 
-        $message = <<<EOD
-Unhandled Routing Key: {$request->input('message.attributes.routingKey')}
-1) Verify that a Pub Sub Message class exists for this routing key.
-2) The subscriber endpoint that calls PubSub->subscribe() must include an array of all the handled Pub Sub Messages.
-Request: {$input}
-EOD;
+        $message = implode(
+            "\n",
+            [
+                "Unhandled Routing Key: {$request->input('message.attributes.routingKey')}",
+                "Request: {$input}",
+                "\n",
+                "1) Verify that a Pub Sub Message class exists for this routing key.",
+                "2) The subscriber endpoint that calls PubSub->subscribe() must include an " .
+                "array of all the handled Pub Sub Messages.",
+            ]
+        );
 
         return new static($message);
     }

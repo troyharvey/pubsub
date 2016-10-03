@@ -18,9 +18,6 @@ abstract class PubSubMessage
     /** @var string data */
     protected $data;
 
-    /** @var string project Google project slug */
-    protected $project;
-
     /** @var string routingKey Message routing key. e.g. accounts.customer.created */
     public static $routingKey;
 
@@ -29,6 +26,11 @@ abstract class PubSubMessage
 
     /** @var string entity Noun. Entity (or Object type). e.g. customer, tuxedo, shirt, or cart-item. */
     protected $entity;
+
+    public function __construct($data)
+    {
+        $this->data = $data;
+    }
 
     /**
      * The Pub Sub Routing Key is a message attribute. For example, "Customer Created"
@@ -49,6 +51,8 @@ abstract class PubSubMessage
      * Handle inbound PubSub message.
      *
      * @throws PubSubHandlerNotDefinedException
+     *
+     * @return string
      */
     public function handle()
     {

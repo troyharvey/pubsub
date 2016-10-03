@@ -2,7 +2,6 @@
 
 namespace GenTux\GooglePubSub\Drivers\Google;
 
-
 use GenTux\GooglePubSub\PubSubMessage;
 use Google_Client;
 use Google_Service_Pubsub;
@@ -27,6 +26,13 @@ class PubSub implements \GenTux\GooglePubSub\Contracts\PubSub
         $this->config = $config;
     }
 
+    /**
+     * Publish a message using Google PubSub.
+     *
+     * @param PubSubMessage $message
+     *
+     * @return void
+     */
     public function publish(PubSubMessage $message)
     {
         $client = new Google_Client();
@@ -50,12 +56,25 @@ class PubSub implements \GenTux\GooglePubSub\Contracts\PubSub
         $request->setMessages([$pubSubMessage]);
 
         $pubsub->projects_topics->publish(
-            "projects/{$this->config->get('queue.connections.pubsub.project')}/topics/{$message->topic()}",
+            "projects/{$this->config->get('pubsub.project')}/topics/{$message->topic()}",
             $request
         );
     }
 
 
+    /**
+     * Handles an HTTP POST message pushed by Google PubSub.
+     * Finds and returns a PubSubMessage by matching up the `routingKey`
+     * attribute of the push message with class that handles that
+     * `routingKey`.
+     *
+     * @param Request $request
+     * @param array $messages
+     *
+     * @throws PubSubRoutingKeyException
+     *
+     * @return PubSubMessage
+     */
     public function subscribe(Request $request, array $messages)
     {
         /** @var String $routingKey */

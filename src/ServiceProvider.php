@@ -32,6 +32,6 @@ class ServiceProvider extends BaseServiceProvider
      */
     public function register()
     {
-        $this->mergeConfigFrom(__DIR__.'/config.php', 'queue.connections.pubsub');
+        $this->mergeConfigFrom(__DIR__.'/config.php', 'pubsub');
     }
 }
