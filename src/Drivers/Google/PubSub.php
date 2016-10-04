@@ -116,9 +116,9 @@ class PubSub implements \GenTux\PubSub\Contracts\PubSub
                             ]
                         )
                     );
-                } finally {
-                    return $this->response->make('', 204);
                 }
+
+                return $this->response->make('', 204);
             }
         }
 
