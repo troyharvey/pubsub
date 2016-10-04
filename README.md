@@ -1,5 +1,7 @@
 # PubSub for Lumen & Laravel
 
+[![Coverage Status](https://img.shields.io/codecov/c/github/generationtux/pubsub.svg?maxAge=2592000?style=flat)](https://codecov.io/gh/generationtux/pubsub/)
+
 PubSub is a push notification system for your backend. `Publishers` add
 `Messages` to a `Topic` and `Subscribers` receive the message as a push
 notification. Think of it as
