@@ -1,6 +1,6 @@
 {
-    "name": "generationtux/google-pubsub",
-    "description": "Google Pub/Sub push queue Iron.io alternative for Lumen, Laravel, and PHP.",
+    "name": "generationtux/pubsub",
+    "description": "A Lumen & Laravel package for Google Pub/Sub or Amazon SNS",
     "type": "library",
     "license": "MIT",
     "authors": [
@@ -21,12 +21,12 @@
     },
     "autoload": {
         "psr-4": {
-            "GenTux\\GooglePubSub\\": "src/"
+            "GenTux\\PubSub\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "GenTux\\GooglePubSub\\Tests\\": "tests/"
+            "GenTux\\PubSub\\Tests\\": "tests/"
         }
     },
     "config": {

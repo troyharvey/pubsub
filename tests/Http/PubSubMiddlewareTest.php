@@ -1,9 +1,9 @@
 <?php
 
-namespace GenTux\GooglePubSub\Tests\Http;
+namespace GenTux\PubSub\Tests\Http;
 
-use GenTux\GooglePubSub\Exceptions\PubSubSecurityTokenException;
-use GenTux\GooglePubSub\Http\PubSubMiddleware;
+use GenTux\PubSub\Exceptions\PubSubSecurityTokenException;
+use GenTux\PubSub\Http\PubSubMiddleware;
 use Illuminate\Http\Request;
 use Mockery;
 

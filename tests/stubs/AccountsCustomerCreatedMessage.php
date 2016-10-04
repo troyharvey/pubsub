@@ -1,8 +1,8 @@
 <?php
 
-namespace GenTux\GooglePubSub\Tests\Stubs;
+namespace GenTux\PubSub\Tests\Stubs;
 
-use GenTux\GooglePubSub\PubSubMessage;
+use GenTux\PubSub\PubSubMessage;
 
 class AccountsCustomerCreatedMessage extends PubSubMessage
 {

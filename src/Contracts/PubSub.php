@@ -1,9 +1,9 @@
 <?php
 
-namespace GenTux\GooglePubSub\Contracts;
+namespace GenTux\PubSub\Contracts;
 
-use GenTux\GooglePubSub\Exceptions\PubSubRoutingKeyException;
-use GenTux\GooglePubSub\PubSubMessage;
+use GenTux\PubSub\Exceptions\PubSubRoutingKeyException;
+use GenTux\PubSub\PubSubMessage;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace GenTux\GooglePubSub;
+namespace GenTux\PubSub;
 
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 
@@ -20,8 +20,8 @@ class ServiceProvider extends BaseServiceProvider
         );
 
         $this->app->bind(
-            \GenTux\GooglePubSub\Contracts\PubSub::class,
-            \GenTux\GooglePubSub\Drivers\Google\PubSub::class
+            \GenTux\PubSub\Contracts\PubSub::class,
+            \GenTux\PubSub\Drivers\Google\PubSub::class
         );
     }
 

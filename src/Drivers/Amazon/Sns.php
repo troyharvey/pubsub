@@ -1,9 +1,9 @@
 <?php
 
-namespace GenTux\GooglePubSub\Drivers\Amazon;
+namespace GenTux\PubSub\Drivers\Amazon;
 
 
-use GenTux\GooglePubSub\Contracts\PubSub;
+use GenTux\PubSub\Contracts\PubSub;
 
 class Sns implements PubSub
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace GenTux\GooglePubSub;
+namespace GenTux\PubSub;
 
-use GenTux\GooglePubSub\Exceptions\PubSubHandlerNotDefinedException;
+use GenTux\PubSub\Exceptions\PubSubHandlerNotDefinedException;
 
 /**
  * @property string $data

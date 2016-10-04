@@ -1,6 +1,6 @@
 <?php
 
-namespace GenTux\GooglePubSub\Exceptions;
+namespace GenTux\PubSub\Exceptions;
 
 class PubSubSecurityTokenException extends \Exception
 {

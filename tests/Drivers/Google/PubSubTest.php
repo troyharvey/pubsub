@@ -1,11 +1,11 @@
 <?php
 
-namespace GenTux\GooglePubSub\Tests\Drivers\Google;
+namespace GenTux\PubSub\Tests\Drivers\Google;
 
-use GenTux\GooglePubSub\Drivers\Google\PubSub;
-use GenTux\GooglePubSub\Exceptions\PubSubRoutingKeyException;
-use GenTux\GooglePubSub\PubSubMessage;
-use GenTux\GooglePubSub\Tests\Stubs\AccountsCustomerCreatedMessage;
+use GenTux\PubSub\Drivers\Google\PubSub;
+use GenTux\PubSub\Exceptions\PubSubRoutingKeyException;
+use GenTux\PubSub\PubSubMessage;
+use GenTux\PubSub\Tests\Stubs\AccountsCustomerCreatedMessage;
 use Illuminate\Config\Repository;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Foundation\Application;
@@ -57,7 +57,7 @@ class PubSubTest extends \PHPUnit_Framework_TestCase
     public function it_implements_pub_sub_interface()
     {
         $this->assertInstanceOf(
-            \GenTux\GooglePubSub\Contracts\PubSub::class,
+            \GenTux\PubSub\Contracts\PubSub::class,
             $this->client,
             'The Google PubSub client does not implement the PubSub interface.'
         );

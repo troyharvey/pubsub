@@ -1,9 +1,9 @@
 <?php
 
-namespace GenTux\GooglePubSub\Http;
+namespace GenTux\PubSub\Http;
 
 use Closure;
-use GenTux\GooglePubSub\Exceptions\PubSubSecurityTokenException;
+use GenTux\PubSub\Exceptions\PubSubSecurityTokenException;
 
 class PubSubMiddleware
 {

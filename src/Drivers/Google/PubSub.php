@@ -1,9 +1,9 @@
 <?php
 
-namespace GenTux\GooglePubSub\Drivers\Google;
+namespace GenTux\PubSub\Drivers\Google;
 
-use GenTux\GooglePubSub\Exceptions\PubSubRoutingKeyException;
-use GenTux\GooglePubSub\PubSubMessage;
+use GenTux\PubSub\Exceptions\PubSubRoutingKeyException;
+use GenTux\PubSub\PubSubMessage;
 use Google_Client;
 use Google_Service_Pubsub;
 use Google_Service_Pubsub_PublishRequest;
@@ -14,7 +14,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
 use Illuminate\Log\Writer;
 
-class PubSub implements \GenTux\GooglePubSub\Contracts\PubSub
+class PubSub implements \GenTux\PubSub\Contracts\PubSub
 {
     /** @var Application */
     protected $app;

@@ -1,9 +1,9 @@
 <?php
 
-namespace GenTux\GooglePubSub\Tests;
+namespace GenTux\PubSub\Tests;
 
-use GenTux\GooglePubSub\PubSubMessage;
-use GenTux\GooglePubSub\Tests\Stubs\AccountsCustomerCreatedMessage;
+use GenTux\PubSub\PubSubMessage;
+use GenTux\PubSub\Tests\Stubs\AccountsCustomerCreatedMessage;
 
 class PubSubMessageTest extends \PHPUnit_Framework_TestCase
 {
@@ -26,5 +26,19 @@ class PubSubMessageTest extends \PHPUnit_Framework_TestCase
     public function it_has_a_topic()
     {
         $this->assertEquals('testing-v1-customer', $this->message->topic());
+    }
+
+    /** @test */
+    public function it_wraps_environment_in_a_method()
+    {
+        $this->assertEquals('testing', $this->message->environment());
+    }
+
+    /** @test */
+    public function it_implements_handle_method()
+    {
+        $this->message->data = json_decode('{"herp": "derp"}');
+
+        $this->assertEquals($this->message->data, $this->message->handle());
     }
 }

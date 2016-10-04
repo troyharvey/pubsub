@@ -1,19 +1,29 @@
-# Google PubSub for Laravel & Lumen
+# PubSub for Lumen & Laravel
 
-## TODO
+PubSub is a push notification system for your backend. `Publishers` add
+`Messages` to a `Topic` and `Subscribers` receive the message as a push
+notification. Think of it as
+[Laravel Echo](https://laravel.com/docs/5.3/broadcasting) for microservices.
 
+![](https://cloud.google.com/pubsub/images/pub_sub_flow.svg)
 
-* Tne subscribe endpoint has to return to the right status codes because amazon and good handle responses differently
-* So the subscribe endpoint has to call handle on the message
-* Add retries() method to the message that can be overrirden per message to use the  - use a retries environment variable so all messages don't have to implement it'
-* Switch the package name to PubSub or Paperboy or Bugle
-* Repair the config - move it out from under queue
-* Test it end to end again inside the testscontroller
-* What is the test coverage?
-* Write the readme for setting up pub sub from scratch using gcloud
-* write sns driver
+## Highlights
 
+* Build loosely coupled, scalable systems consistent with your other
+message-oriented Laravel code
+* Simple API that leaves your Laravel code looking clean
+* Driver-based so changing Pub/Sub providers is a simple configuration change
+* Delete the duplicated Pub/Sub boilerplate in each of your apps
+* [Google Pub/Sub](https://cloud.google.com/pubsub/docs/overview) support
+* [Amazon SNS](https://aws.amazon.com/sns/) support __coming soon__
 
-Illuminate\Contracts\PubSub\ShouldPublish
-  https://github.com/laravel/framework/blob/7d116dc5a008e69c97f864af79ac46ab6a8d5895/src/Illuminate/Contracts/Broadcasting/ShouldBroadcast.php
+## Install
+
+Install `PubSub` using [Composer](https://getcomposer.org/).
+
+```
+composer require generationtux/pubsub
+```
+
+## Configuration
 
