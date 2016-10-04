@@ -2,9 +2,11 @@
 
 ## TODO
 
-* update service provider to use the new contract/driver setup
-* switch tests to run on driver
-* Switch the package name to Bugle.
+
+* Tne subscribe endpoint has to return to the right status codes because amazon and good handle responses differently
+* So the subscribe endpoint has to call handle on the message
+* Add retries() method to the message that can be overrirden per message to use the  - use a retries environment variable so all messages don't have to implement it'
+* Switch the package name to PubSub or Paperboy or Bugle
 * Repair the config - move it out from under queue
 * Test it end to end again inside the testscontroller
 * What is the test coverage?

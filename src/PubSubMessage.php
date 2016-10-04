@@ -2,7 +2,6 @@
 
 namespace GenTux\GooglePubSub;
 
-
 use GenTux\GooglePubSub\Exceptions\PubSubHandlerNotDefinedException;
 
 /**

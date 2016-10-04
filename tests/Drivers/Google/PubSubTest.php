@@ -7,8 +7,11 @@ use GenTux\GooglePubSub\Exceptions\PubSubRoutingKeyException;
 use GenTux\GooglePubSub\PubSubMessage;
 use GenTux\GooglePubSub\Tests\Stubs\AccountsCustomerCreatedMessage;
 use Illuminate\Config\Repository;
+use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Log\Writer;
 use Mockery;
 
 class PubSubTest extends \PHPUnit_Framework_TestCase
@@ -19,6 +22,12 @@ class PubSubTest extends \PHPUnit_Framework_TestCase
     /** @var Repository */
     protected $config;
 
+    /** @var Writer */
+    protected $log;
+
+    /** @var ResponseFactory */
+    protected $response;
+
     /** @var PubSub */
     protected $client;
 
@@ -26,8 +35,15 @@ class PubSubTest extends \PHPUnit_Framework_TestCase
     {
         $this->app = Mockery::mock(Application::class);
         $this->config = Mockery::mock(Repository::class);
+        $this->log = Mockery::mock(Writer::class);
+        $this->response = Mockery::mock(ResponseFactory::class);
 
-        $this->client = new PubSub($this->app, $this->config);
+        $this->client = new PubSub(
+            $this->app,
+            $this->config,
+            $this->log,
+            $this->response
+        );
     }
 
     public function tearDown()
@@ -90,18 +106,24 @@ class PubSubTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
+        $noContentResponse = new Response();
+        $noContentResponse->setStatusCode(204);
+
+        $this->response
+            ->shouldReceive('make')
+            ->with("", 204)
+            ->andReturn($noContentResponse);
+
+
         /** @var PubSubMessage $message */
-        $message = $this->client->subscribe(
+        $actualResponse = $this->client->subscribe(
             $request,
             [
                 AccountsCustomerCreatedMessage::class
             ]
         );
-        
-        $this->assertInstanceOf(AccountsCustomerCreatedMessage::class, $message);
 
-        $result = $message->handle($request);
-        $this->assertEquals('{"herpy":"derpy"}', $result);
+        $this->assertEquals($noContentResponse, $actualResponse);
     }
 
     /** @test */

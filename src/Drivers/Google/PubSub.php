@@ -2,15 +2,17 @@
 
 namespace GenTux\GooglePubSub\Drivers\Google;
 
+use GenTux\GooglePubSub\Exceptions\PubSubRoutingKeyException;
 use GenTux\GooglePubSub\PubSubMessage;
 use Google_Client;
 use Google_Service_Pubsub;
 use Google_Service_Pubsub_PublishRequest;
 use Google_Service_Pubsub_PubsubMessage;
-use GenTux\GooglePubSub\Exceptions\PubSubRoutingKeyException;
 use Illuminate\Config\Repository;
+use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
+use Illuminate\Log\Writer;
 
 class PubSub implements \GenTux\GooglePubSub\Contracts\PubSub
 {
@@ -20,10 +22,22 @@ class PubSub implements \GenTux\GooglePubSub\Contracts\PubSub
     /** @var Repository */
     protected $config;
 
-    public function __construct(Application $application, Repository $config)
-    {
-        $this->app = $application;
+    /** @var Writer */
+    protected $log;
+
+    /** @var ResponseFactory */
+    protected $response;
+
+    public function __construct(
+        Application $app,
+        Repository $config,
+        Writer $log,
+        ResponseFactory $response
+    ) {
+        $this->app = $app;
         $this->config = $config;
+        $this->log = $log;
+        $this->response = $response;
     }
 
     /**
@@ -31,7 +45,7 @@ class PubSub implements \GenTux\GooglePubSub\Contracts\PubSub
      *
      * @param PubSubMessage $message
      *
-     * @return void
+     * @return mixed
      */
     public function publish(PubSubMessage $message)
     {
@@ -55,7 +69,7 @@ class PubSub implements \GenTux\GooglePubSub\Contracts\PubSub
         $request = new Google_Service_Pubsub_PublishRequest();
         $request->setMessages([$pubSubMessage]);
 
-        $pubsub->projects_topics->publish(
+        return $pubsub->projects_topics->publish(
             "projects/{$this->config->get('pubsub.project')}/topics/{$message->topic()}",
             $request
         );
@@ -84,9 +98,27 @@ class PubSub implements \GenTux\GooglePubSub\Contracts\PubSub
             if ($messageClass::handles($routingKey)) {
 
                 /** @var PubSubMessage $message */
-                return new $messageClass(
+                $message = new $messageClass(
                     base64_decode($request->input('message.data'))
                 );
+
+                try {
+                    $message->handle();
+                } catch (\Exception $e) {
+                    $this->log->error(
+                        implode(
+                            "\n",
+                            [
+                                get_class($e),
+                                $e->getMessage(),
+                                $e->getCode(),
+                                json_encode($request->all()),
+                            ]
+                        )
+                    );
+                } finally {
+                    return $this->response->make('', 204);
+                }
             }
         }
 
