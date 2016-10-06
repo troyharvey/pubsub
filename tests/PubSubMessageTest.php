@@ -5,7 +5,7 @@ namespace GenTux\PubSub\Tests;
 use GenTux\PubSub\Exceptions\PubSubHandlerNotDefinedException;
 use GenTux\PubSub\PubSubMessage;
 use GenTux\PubSub\Tests\Stubs\AccountsCustomerCreatedMessage;
-use GenTux\PubSub\Tests\Stubs\MessageWithoutHandle;
+use GenTux\PubSub\Tests\Stubs\HandleMissingMessage;
 
 class PubSubMessageTest extends \PHPUnit_Framework_TestCase
 {
@@ -49,10 +49,10 @@ class PubSubMessageTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException(
             PubSubHandlerNotDefinedException::class,
-            'Missing GenTux\PubSub\Tests\Stubs\MessageWithoutHandle::handler() method definition.'
+            'Missing GenTux\PubSub\Tests\Stubs\HandleMissingMessage::handler() method definition.'
         );
 
-        $message = new MessageWithoutHandle([]);
+        $message = new HandleMissingMessage([]);
         $message->handle();
     }
 

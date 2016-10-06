@@ -6,6 +6,7 @@ use GenTux\PubSub\Drivers\Google\PubSub;
 use GenTux\PubSub\Exceptions\PubSubRoutingKeyException;
 use GenTux\PubSub\PubSubMessage;
 use GenTux\PubSub\Tests\Stubs\AccountsCustomerCreatedMessage;
+use GenTux\PubSub\Tests\Stubs\HandleThrowsExceptionMessage;
 use Illuminate\Config\Repository;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Foundation\Application;
@@ -16,16 +17,16 @@ use Mockery;
 
 class PubSubTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var Application */
+    /** @var Application|Mockery\MockInterface */
     protected $app;
 
-    /** @var Repository */
+    /** @var Repository|Mockery\MockInterface */
     protected $config;
 
-    /** @var Writer */
+    /** @var Writer|Mockery\MockInterface */
     protected $log;
 
-    /** @var ResponseFactory */
+    /** @var ResponseFactory|Mockery\MockInterface */
     protected $response;
 
     /** @var PubSub */
@@ -147,6 +148,33 @@ class PubSubTest extends \PHPUnit_Framework_TestCase
             $request,
             [
                 AccountsCustomerCreatedMessage::class
+            ]
+        );
+    }
+
+    /** @test */
+    public function it_logs_error_when_handle_throws_exception()
+    {
+        $request = new Request();
+        $request->merge(
+            [
+                'message' => [
+                    'attributes' => [
+                        'routingKey' => 'accounts.customer.throw.exception',
+                    ],
+                ]
+            ]
+        );
+
+        $this->log->shouldReceive('error')->once();
+        $this->response
+            ->shouldReceive('make')
+            ->with("", 204);
+
+        $this->client->subscribe(
+            $request,
+            [
+                HandleThrowsExceptionMessage::class
             ]
         );
     }
