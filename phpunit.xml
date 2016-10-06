@@ -20,9 +20,6 @@
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">./src</directory>
-            <exclude>
-                <file>./src/config.php</file>
-            </exclude>
         </whitelist>
     </filter>
     <php>

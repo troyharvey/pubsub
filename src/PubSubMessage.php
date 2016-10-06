@@ -3,6 +3,7 @@
 namespace GenTux\PubSub;
 
 use GenTux\PubSub\Exceptions\PubSubHandlerNotDefinedException;
+use Illuminate\Container\Container;
 
 /**
  * @property string $data
@@ -93,7 +94,7 @@ abstract class PubSubMessage
      */
     public function environment()
     {
-        return app()->environment();
+        return getenv('APP_ENV');
     }
 
     /**

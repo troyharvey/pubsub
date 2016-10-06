@@ -14,9 +14,4 @@ class AccountsCustomerCreatedMessage extends PubSubMessage
     {
         return $this->data;
     }
-
-    public function environment()
-    {
-        return getenv('APP_ENV');
-    }
 }

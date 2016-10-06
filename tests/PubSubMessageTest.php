@@ -2,8 +2,10 @@
 
 namespace GenTux\PubSub\Tests;
 
+use GenTux\PubSub\Exceptions\PubSubHandlerNotDefinedException;
 use GenTux\PubSub\PubSubMessage;
 use GenTux\PubSub\Tests\Stubs\AccountsCustomerCreatedMessage;
+use GenTux\PubSub\Tests\Stubs\MessageWithoutHandle;
 
 class PubSubMessageTest extends \PHPUnit_Framework_TestCase
 {
@@ -40,5 +42,26 @@ class PubSubMessageTest extends \PHPUnit_Framework_TestCase
         $this->message->data = json_decode('{"herp": "derp"}');
 
         $this->assertEquals($this->message->data, $this->message->handle());
+    }
+
+    /** @test */
+    public function it_throws_exception_when_handle_is_not_defined()
+    {
+        $this->setExpectedException(
+            PubSubHandlerNotDefinedException::class,
+            'Missing GenTux\PubSub\Tests\Stubs\MessageWithoutHandle::handler() method definition.'
+        );
+
+        $message = new MessageWithoutHandle([]);
+        $message->handle();
+    }
+
+    /** @test */
+    public function it_supports_isset_and_empty_for_properties()
+    {
+        $this->message->data = 'herp';
+
+        $this->assertTrue(isset($this->message->data), 'isset failed on data property');
+        $this->assertFalse(empty($this->message->data), 'empty failed on data property');
     }
 }
