@@ -1,5 +1,6 @@
 # PubSub
 
+[![Latest Version](https://img.shields.io/github/release/generationtux/pubsub.svg?style=flat)](https://github.com/generationtux/pubsub/releases)
 [![Coverage Status](https://img.shields.io/codecov/c/github/generationtux/pubsub.svg?maxAge=2592000?style=flat)](https://codecov.io/gh/generationtux/pubsub/)
 
 PubSub is a push notification system for your Lumen (and Laravel) backend systems. `Publishers` add
