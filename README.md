@@ -30,5 +30,20 @@ Install `PubSub` using [Composer](https://getcomposer.org/).
 composer require generationtux/pubsub
 ```
 
+Add the service provider to `config/app.php`:
+
+```
+/*
+ * Package Service Providers...
+ */
+
+GenTux\PubSub\PubSubServiceProvider::class,
+```
+
 ## Configuration
 
+## FAQ
+
+1. I see an error that says `Target [GenTux\PubSub\Contracts\PubSub] is not instantiable`.
+
+> Be sure that the Service Provider is added to `config/app.php`.
