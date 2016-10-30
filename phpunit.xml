@@ -22,7 +22,7 @@
             <directory suffix=".php">./src</directory>
             <exclude>
                 <file>./src/config.php</file>
-                <file>./src/ServiceProvider.php</file>
+                <file>./src/PubSubServiceProvider.php</file>
             </exclude>
         </whitelist>
     </filter>
