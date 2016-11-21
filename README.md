@@ -118,7 +118,27 @@ $app->routeMiddleware([
 
 3. Add a `PubSubController` to your project.
 
+```php
+class PubSubController extends Controller
+{
+    protected $pubsub;
 
+    public function __construct(PubSub $pubSub)
+    {
+        $this->pubsub = $pubSub;
+    }
+
+    public function subscribe(Request $request)
+    {
+        return $this->pubsub->subscribe(
+            $request,
+            [
+                // AccountCreatedMessage::class,
+            ]
+        );
+    }
+}
+```
 
 4. Add a route for the controller.
 
