@@ -10,8 +10,9 @@ class PubSubMiddleware
     /**
      * Validate the PubSub security token attached to the request
      *
-     * @param \Illuminate\Http\Request $request
-     * @param Closure $next
+     * @param \Illuminate\Http\Request $request HTTP Request
+     * @param Closure                  $next    Next middleware
+     *
      * @throws PubSubSecurityTokenException
      * @return Closure
      */

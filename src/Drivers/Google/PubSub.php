@@ -9,10 +9,9 @@ use Google_Service_Pubsub;
 use Google_Service_Pubsub_PublishRequest;
 use Google_Service_Pubsub_PubsubMessage;
 use Illuminate\Config\Repository;
-use Illuminate\Contracts\Routing\ResponseFactory;
-use Illuminate\Foundation\Application;
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\Request;
-use Illuminate\Log\Writer;
+
 
 class PubSub implements \GenTux\PubSub\Contracts\PubSub
 {
@@ -22,22 +21,12 @@ class PubSub implements \GenTux\PubSub\Contracts\PubSub
     /** @var Repository */
     protected $config;
 
-    /** @var Writer */
-    protected $log;
-
-    /** @var ResponseFactory */
-    protected $response;
-
     public function __construct(
         Application $app,
-        Repository $config,
-        Writer $log,
-        ResponseFactory $response
+        Repository $config
     ) {
         $this->app = $app;
         $this->config = $config;
-        $this->log = $log;
-        $this->response = $response;
     }
 
     /**
@@ -105,7 +94,7 @@ class PubSub implements \GenTux\PubSub\Contracts\PubSub
                 try {
                     $message->handle();
                 } catch (\Exception $e) {
-                    $this->log->error(
+                    $this->app->make('Log')->error(
                         implode(
                             "\n",
                             [
@@ -118,7 +107,7 @@ class PubSub implements \GenTux\PubSub\Contracts\PubSub
                     );
                 }
 
-                return $this->response->make('', 204);
+                return $this->app->make('Response')->make('', 204);
             }
         }
 

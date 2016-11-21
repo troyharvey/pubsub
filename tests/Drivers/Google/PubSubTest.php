@@ -8,11 +8,11 @@ use GenTux\PubSub\PubSubMessage;
 use GenTux\PubSub\Tests\Stubs\AccountsCustomerCreatedMessage;
 use GenTux\PubSub\Tests\Stubs\HandleThrowsExceptionMessage;
 use Illuminate\Config\Repository;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Logging\Log;
 use Illuminate\Contracts\Routing\ResponseFactory;
-use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Log\Writer;
 use Mockery;
 
 class PubSubTest extends \PHPUnit_Framework_TestCase
@@ -23,7 +23,7 @@ class PubSubTest extends \PHPUnit_Framework_TestCase
     /** @var Repository|Mockery\MockInterface */
     protected $config;
 
-    /** @var Writer|Mockery\MockInterface */
+    /** @var Log|Mockery\MockInterface */
     protected $log;
 
     /** @var ResponseFactory|Mockery\MockInterface */
@@ -36,14 +36,12 @@ class PubSubTest extends \PHPUnit_Framework_TestCase
     {
         $this->app = Mockery::mock(Application::class);
         $this->config = Mockery::mock(Repository::class);
-        $this->log = Mockery::mock(Writer::class);
         $this->response = Mockery::mock(ResponseFactory::class);
+        $this->log = Mockery::mock(Log::class);
 
         $this->client = new PubSub(
             $this->app,
-            $this->config,
-            $this->log,
-            $this->response
+            $this->config
         );
     }
 
@@ -115,6 +113,10 @@ class PubSubTest extends \PHPUnit_Framework_TestCase
             ->with("", 204)
             ->andReturn($noContentResponse);
 
+        $this->app
+            ->shouldReceive('make')
+            ->with('Response')
+            ->andReturn($this->response);
 
         /** @var PubSubMessage $message */
         $actualResponse = $this->client->subscribe(
@@ -166,10 +168,23 @@ class PubSubTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->log->shouldReceive('error')->once();
+        $this->log
+            ->shouldReceive('error')
+            ->once();
+
         $this->response
             ->shouldReceive('make')
+            ->once()
             ->with("", 204);
+
+        $this->app
+            ->shouldReceive('make')
+            ->with('Log')
+            ->andReturn($this->log)
+            ->shouldReceive('make')
+            ->with('Response')
+            ->once()
+            ->andReturn($this->response);
 
         $this->client->subscribe(
             $request,
