@@ -18,7 +18,7 @@ class PubSubMiddleware
      */
     public function handle($request, Closure $next)
     {
-        $securityToken = getenv('GOOGLE_PUB_SUB_SUBSCRIBER_TOKEN');
+        $securityToken = getenv('PUB_SUB_SUBSCRIBER_TOKEN');
 
         if (empty($securityToken) || $request->input('token') == $securityToken) {
             return $next($request);

@@ -94,68 +94,69 @@ If your app is publishing messages to a Pub/Sub topic, then you need to add Goog
 1. Register the Pub/Sub middleware. This middleware uses your `PUB_SUB_SUBSCRIBER_TOKEN` to secure the subscription endpoint.
 Any messages sent to your Pub/Sub endpoint without a token will be rejected.
 
+    Add `pubsub` middleware to end of the `routeMiddleware` array in `Http\Kernel.php` for [Laravel](https://laravel.com/docs/master/middleware#assigning-middleware-to-routes) apps:
+
+    ```php
+    protected $routeMiddleware = [
+        ...
+        'pubsub' => \GenTux\PubSub\Http\PubSubMiddleware::class,
+    ];
+    ```
+
+    Add the `pubsub` middleware line to the end of the `routeMiddleware` array in `bootstrap/app.php` for [Lumen](https://lumen.laravel.com/docs/master/middleware#assigning-middleware-to-routes) apps:
+
+    ```php
+    $app->routeMiddleware([
+        ...
+        'pubsub' => \GenTux\PubSub\Http\PubSubMiddleware::class,
+    ]);
+    ```
+
 2. Generate a random string and add it to your `.env` file.
 
         PUB_SUB_SUBSCRIBER_TOKEN=7RWfH4yxnXXsep5k3LpVxv7oSlnhyFPFeHda87i3Vc
 
-Add `pubsub` middleware to end of the `routeMiddleware` array in `Http\Kernel.php` for [Laravel](https://laravel.com/docs/master/middleware#assigning-middleware-to-routes) apps:
-
-```php
-protected $routeMiddleware = [
-    ...
-    'pubsub' => \GenTux\PubSub\Http\PubSubMiddleware::class,
-];
-```
-
-Add the `pubsub` middleware line to the end of the `routeMiddleware` array in `bootstrap/app.php` for [Lumen](https://lumen.laravel.com/docs/master/middleware#assigning-middleware-to-routes) apps:
-
-```php
-$app->routeMiddleware([
-    ...
-    'pubsub' => \GenTux\PubSub\Http\PubSubMiddleware::class,
-]);
-```
-
 3. Add a `PubSubController` to your project.
 
-```php
-class PubSubController extends Controller
-{
-    protected $pubsub;
-
-    public function __construct(PubSub $pubSub)
+    ```php
+    class PubSubController extends Controller
     {
-        $this->pubsub = $pubSub;
-    }
+        protected $pubsub;
 
-    public function subscribe(Request $request)
-    {
-        return $this->pubsub->subscribe(
-            $request,
-            [
-                // AccountCreatedMessage::class,
-            ]
-        );
+        public function __construct(PubSub $pubSub)
+        {
+            $this->pubsub = $pubSub;
+        }
+
+        public function subscribe(Request $request)
+        {
+            return $this->pubsub->subscribe(
+                $request,
+                [
+                    // AccountCreatedMessage::class,
+                ]
+            );
+        }
     }
-}
-```
+    ```
 
 4. Add a route for the controller.
 
-```
-$app->group(
-    [
-        'namespace' => $ns,
-        'middleware' => ['pubsub'],
-    ],
-    function ($app) {
-        $app->post('subscribers/google-pub-sub', 'GooglePubSubController@subscribe');
-    }
-);
-```
-3. Start ngrok so Google Pub/Sub can reach your localhost.
-4. Follow the steps to verify the ngrok url in the [Google Search Console](https://www.google.com/webmasters/tools)
-5. Add the ngrok url under :fa-navicon: > API Manager > Credentials > [Domain verification](https://console.cloud.google.com/apis/credentials/domainverification)
+    ```
+    $app->group(
+        [
+            'namespace' => $ns,
+            'middleware' => ['pubsub'],
+        ],
+        function ($app) {
+            $app->post('subscribers/google-pub-sub', 'GooglePubSubController@subscribe');
+        }
+    );
+    ```
+
+5. Start ngrok so Google Pub/Sub can reach your localhost.
+6. Follow the steps to verify the ngrok url in the [Google Search Console](https://www.google.com/webmasters/tools)
+7. Add the ngrok url under :fa-navicon: > API Manager > Credentials > [Domain verification](https://console.cloud.google.com/apis/credentials/domainverification)
 
 ## FAQ
 
