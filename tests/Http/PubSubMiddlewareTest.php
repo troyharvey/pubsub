@@ -38,6 +38,7 @@ class PubSubMiddlewareTest extends \PHPUnit_Framework_TestCase
 
         $request->shouldReceive('input')
             ->with('token')
+            ->once()
             ->andReturn('herpderp');
 
         $message = implode(
@@ -51,12 +52,11 @@ class PubSubMiddlewareTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->setExpectedException(PubSubSecurityTokenException::class, $message);
-        $result = $middleware->handle(
+        $middleware->handle(
             $request,
             function () {
                 return true;
             }
         );
-        $this->assertTrue($result);
     }
 }

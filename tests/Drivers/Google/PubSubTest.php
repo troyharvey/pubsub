@@ -3,6 +3,7 @@
 namespace GenTux\PubSub\Tests\Drivers\Google;
 
 use GenTux\PubSub\Drivers\Google\PubSub;
+use GenTux\PubSub\Exceptions\PubSubHandlerNotDefinedException;
 use GenTux\PubSub\Exceptions\PubSubRoutingKeyException;
 use GenTux\PubSub\PubSubMessage;
 use GenTux\PubSub\Tests\Stubs\AccountsCustomerCreatedMessage;
@@ -155,7 +156,7 @@ class PubSubTest extends \PHPUnit_Framework_TestCase
     }
 
     /** @test */
-    public function it_logs_error_when_handle_throws_exception()
+    public function it_does_not_swallow_exception()
     {
         $request = new Request();
         $request->merge(
@@ -168,23 +169,10 @@ class PubSubTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->log
-            ->shouldReceive('error')
-            ->once();
-
-        $this->response
-            ->shouldReceive('make')
-            ->once()
-            ->with("", 204);
-
-        $this->app
-            ->shouldReceive('make')
-            ->with('Log')
-            ->andReturn($this->log)
-            ->shouldReceive('make')
-            ->with('Response')
-            ->once()
-            ->andReturn($this->response);
+        $this->setExpectedException(
+            PubSubHandlerNotDefinedException::class,
+            'Herp derper.'
+        );
 
         $this->client->subscribe(
             $request,

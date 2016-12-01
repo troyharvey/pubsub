@@ -2,6 +2,7 @@
 
 namespace GenTux\PubSub\Tests\Stubs;
 
+use GenTux\PubSub\Exceptions\PubSubHandlerNotDefinedException;
 use GenTux\PubSub\PubSubMessage;
 
 class HandleThrowsExceptionMessage extends PubSubMessage
@@ -12,6 +13,6 @@ class HandleThrowsExceptionMessage extends PubSubMessage
 
     public function handle()
     {
-        throw new \Exception('derp');
+        throw new PubSubHandlerNotDefinedException('Herp derper.');
     }
 }
