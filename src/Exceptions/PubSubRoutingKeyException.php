@@ -4,7 +4,7 @@ namespace GenTux\PubSub\Exceptions;
 
 use Illuminate\Http\Request;
 
-class PubSubRoutingKeyException extends \Exception
+class PubSubRoutingKeyException extends PubSubException
 {
     /**
      * Create a new exception for unhandled routing key.

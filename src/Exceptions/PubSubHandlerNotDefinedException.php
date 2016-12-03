@@ -2,7 +2,7 @@
 
 namespace GenTux\PubSub\Exceptions;
 
-class PubSubHandlerNotDefinedException extends \Exception
+class PubSubHandlerNotDefinedException extends PubSubException
 {
     public static function forMessage($class)
     {

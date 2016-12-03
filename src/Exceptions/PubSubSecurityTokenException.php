@@ -2,7 +2,7 @@
 
 namespace GenTux\PubSub\Exceptions;
 
-class PubSubSecurityTokenException extends \Exception
+class PubSubSecurityTokenException extends PubSubException
 {
     /**
      * Create a new exception for missing token.
