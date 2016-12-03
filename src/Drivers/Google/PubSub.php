@@ -12,7 +12,6 @@ use Illuminate\Config\Repository;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\Request;
 
-
 class PubSub implements \GenTux\PubSub\Contracts\PubSub
 {
     /** @var Application */

@@ -2,6 +2,8 @@
 
 namespace GenTux\PubSub\Exceptions;
 
+use Illuminate\Http\Response;
+
 trait PubSubExceptionHandler
 {
     /**
@@ -17,7 +19,7 @@ trait PubSubExceptionHandler
             /**
              * Invalid security token. Don't retry the message.
              */
-            return response(200);
+            return new Response('', 200);
         }
     }
 }
