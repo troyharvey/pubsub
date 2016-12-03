@@ -3,19 +3,18 @@
 namespace GenTux\PubSub;
 
 use GenTux\PubSub\Exceptions\PubSubHandlerNotDefinedException;
-use Illuminate\Container\Container;
 
 /**
  * @property string $data
  * @property string $project
- * @property string $routingKey
+ * @property static string $routingKey
  * @property string $version
  * @property string $entity
  */
 abstract class PubSubMessage
 {
 
-    /** @var string data */
+    /** @var \stdClass data */
     protected $data;
 
     /** @var string routingKey Message routing key. e.g. accounts.customer.created */
@@ -24,7 +23,10 @@ abstract class PubSubMessage
     /** @var string version Message version */
     protected $version = 'v1';
 
-    /** @var string entity Noun. Entity (or Object type). e.g. customer, tuxedo, shirt, or cart-item. */
+    /**
+     * @var string entity Noun. Entity (or Object type). e.g. customer,
+     * tuxedo, shirt, or cart-item.
+     */
     protected $entity;
 
     public function __construct($data)
@@ -33,13 +35,49 @@ abstract class PubSubMessage
     }
 
     /**
-     * The Pub Sub Routing Key is a message attribute. For example, "Customer Created"
-     * is a system event. The PubSub Topic is the Customer entity - `production-v1-customer`.
-     * The Routing Key includes the verb - `created`, `updated`, `deleted`. For example:
+     * JSON encode the payload of every message by default. Google requires
+     * the `message.data` property to be Base64 encoded for all messages.
+     * What you decide to Base64 encode is up to you. We think it should be
+     * JSON by default.
      *
-     *      accounts.customer.created
+     * Override according to taste.
      *
-     * @param string $routingKey
+     * @param $data
+     *
+     * @return string
+     */
+    public function encode($data)
+    {
+        return json_encode($data);
+    }
+
+    /**
+     * Prior to instantiating a Message, subscribers decode the message
+     * payload in the `message.data` property. Typically the message data
+     * attribute is JSON that is Base64 encoded. So, by default this decode
+     * method just decodes the JSON.
+     *
+     * Override to taste.
+     *
+     * @param String $data Message data
+     *
+     * @return \stdClass
+     */
+    public static function decode($data)
+    {
+        return json_decode($data);
+    }
+
+    /**
+     * The Pub Sub Routing Key is a message attribute. For example,
+     * "Customer Created" is a system event. The PubSub Topic is the Customer
+     * entity - `production-v1-customer`. The Routing Key includes the verb -
+     * `created`, `updated`, `deleted`. For example:
+     *
+     *      `accounts.customer.created`
+     *
+     * @param string $routingKey Routing key
+     *
      * @return bool
      */
     public static function handles($routingKey)

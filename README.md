@@ -30,15 +30,19 @@ message-oriented Laravel code
 composer require generationtux/pubsub
 ```
 
-2. Add the service provider to `config/app.php`:
+2. Register the PubSub Service Provider.
 
-```php
-/*
- * Package Service Providers...
- */
+    Add this line to `config/app.php` for [Laravel](https://laravel.com/docs/master/providers#registering-providers):
 
-GenTux\PubSub\PubSubServiceProvider::class,
-```
+    ```php
+    GenTux\PubSub\PubSubServiceProvider::class,
+    ```
+
+    Add this line to `bootstrap/app.php` for [Lumen](https://lumen.laravel.com/docs/master/providers#registering-providers):
+
+    ```php
+    $app->register(GenTux\PubSub\PubSubServiceProvider::class);
+    ```
 
 ## Pub/Sub Messages
 
@@ -87,14 +91,75 @@ If your app is publishing messages to a Pub/Sub topic, then you need to add Goog
 
 ### Subscriber Configuration
 
-1. Start ngrok so Google Pub/Sub can reach your localhost.
-2. Follow the steps to verify the ngrok url in the [Google Search Console](https://www.google.com/webmasters/tools)
-3. Add the ngrok url under :fa-navicon: > API Manager > Credentials > [Domain verification](https://console.cloud.google.com/apis/credentials/domainverification)
+1. Register the Pub/Sub middleware. This middleware uses your `PUB_SUB_SUBSCRIBER_TOKEN` to secure the subscription endpoint.
+Any messages sent to your Pub/Sub endpoint without a token will be rejected.
 
-        GOOGLE_PUB_SUB_SUBSCRIBER_TOKEN=7RWfH4yxnXXsep5k3LpVxv7oSlnhyFPFeHda87i3Vc
+    Add `pubsub` middleware to end of the `routeMiddleware` array in `Http\Kernel.php` for [Laravel](https://laravel.com/docs/master/middleware#assigning-middleware-to-routes) apps:
+
+    ```php
+    protected $routeMiddleware = [
+        ...
+        'pubsub' => \GenTux\PubSub\Http\PubSubMiddleware::class,
+    ];
+    ```
+
+    Add the `pubsub` middleware line to the end of the `routeMiddleware` array in `bootstrap/app.php` for [Lumen](https://lumen.laravel.com/docs/master/middleware#assigning-middleware-to-routes) apps:
+
+    ```php
+    $app->routeMiddleware([
+        ...
+        'pubsub' => \GenTux\PubSub\Http\PubSubMiddleware::class,
+    ]);
+    ```
+
+2. Generate a random string and add it to your `.env` file.
+
+        PUB_SUB_SUBSCRIBER_TOKEN=7RWfH4yxnXXsep5k3LpVxv7oSlnhyFPFeHda87i3Vc
+
+3. Add a `PubSubController` to your project.
+
+    ```php
+    class PubSubController extends Controller
+    {
+        protected $pubsub;
+
+        public function __construct(PubSub $pubSub)
+        {
+            $this->pubsub = $pubSub;
+        }
+
+        public function subscribe(Request $request)
+        {
+            return $this->pubsub->subscribe(
+                $request,
+                [
+                    // AccountCreatedMessage::class,
+                ]
+            );
+        }
+    }
+    ```
+
+4. Add a route for the controller.
+
+    ```
+    $app->group(
+        [
+            'namespace' => $ns,
+            'middleware' => ['pubsub'],
+        ],
+        function ($app) {
+            $app->post('subscribers/google-pub-sub', 'GooglePubSubController@subscribe');
+        }
+    );
+    ```
+
+5. Start ngrok so Google Pub/Sub can reach your localhost.
+6. Follow the steps to verify the ngrok url in the [Google Search Console](https://www.google.com/webmasters/tools)
+7. Add the ngrok url under :fa-navicon: > API Manager > Credentials > [Domain verification](https://console.cloud.google.com/apis/credentials/domainverification)
 
 ## FAQ
 
 I see an error that says `Target [GenTux\PubSub\Contracts\PubSub] is not instantiable`.
 
-> Be sure that the Service Provider is added to `config/app.php`.
+> Be sure that the `PubSubServiceProvider` is registered.

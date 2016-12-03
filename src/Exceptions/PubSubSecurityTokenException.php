@@ -2,7 +2,7 @@
 
 namespace GenTux\PubSub\Exceptions;
 
-class PubSubSecurityTokenException extends \Exception
+class PubSubSecurityTokenException extends PubSubException
 {
     /**
      * Create a new exception for missing token.
@@ -15,7 +15,7 @@ class PubSubSecurityTokenException extends \Exception
         $message = implode(
             "\n",
             [
-                "1) Check the GOOGLE_PUB_SUB_SUBSCRIBER_TOKEN environment variable.",
+                "1) Check the PUB_SUB_SUBSCRIBER_TOKEN environment variable.",
                 "2) Verify the 'Push Endpoint URL' in Google Pub/Sub has a token querystring parameter set.",
                 "Subscriptions: https://console.cloud.google.com/cloudpubsub/topicList",
                 "Invalid token: {$token}",

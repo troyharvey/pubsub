@@ -17,7 +17,7 @@ class PubSubServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(__DIR__.'/config.php', 'pubsub');
 
         $this->app->singleton(
-            \GenTux\PubSub\Contracts\PubSub::class,
+            Contracts\PubSub::class,
             function ($app) {
                 $config = $app->make(Repository::class);
                 $driver = $config->get('pubsub.driver', 'google');

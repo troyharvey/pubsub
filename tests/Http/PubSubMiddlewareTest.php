@@ -38,12 +38,13 @@ class PubSubMiddlewareTest extends \PHPUnit_Framework_TestCase
 
         $request->shouldReceive('input')
             ->with('token')
+            ->once()
             ->andReturn('herpderp');
 
         $message = implode(
             "\n",
             [
-                "1) Check the GOOGLE_PUB_SUB_SUBSCRIBER_TOKEN environment variable.",
+                "1) Check the PUB_SUB_SUBSCRIBER_TOKEN environment variable.",
                 "2) Verify the 'Push Endpoint URL' in Google Pub/Sub has a token querystring parameter set.",
                 "Subscriptions: https://console.cloud.google.com/cloudpubsub/topicList",
                 "Invalid token: herpderp",
@@ -51,12 +52,11 @@ class PubSubMiddlewareTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->setExpectedException(PubSubSecurityTokenException::class, $message);
-        $result = $middleware->handle(
+        $middleware->handle(
             $request,
             function () {
                 return true;
             }
         );
-        $this->assertTrue($result);
     }
 }

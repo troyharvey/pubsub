@@ -64,4 +64,21 @@ class PubSubMessageTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(isset($this->message->data), 'isset failed on data property');
         $this->assertFalse(empty($this->message->data), 'empty failed on data property');
     }
+
+    /** @test */
+    public function it_decodes_message_data()
+    {
+        $message = $this->message->decode('{"herp": "derp"}');
+
+        $this->assertEquals('derp', $message->herp);
+    }
+
+    public function it_encodes_message_data()
+    {
+        $data = new \stdClass();
+        $data->herp = 'derp';
+
+        $message = $this->message->encode($data);
+        $this->assertEquals('{"herp": "derp"}', $message);
+    }
 }
