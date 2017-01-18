@@ -11,6 +11,7 @@
     ],
     "minimum-stability": "stable",
     "require": {
+        "chrisbarr/amazon-sns-php-api": "^1.5",
         "google/apiclient": "^2.0"
     },
     "require-dev": {

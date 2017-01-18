@@ -78,7 +78,7 @@ class PubSubTest extends \PHPUnit_Framework_TestCase
 
         $this->config
             ->shouldReceive('get')
-            ->with('pubsub.project')
+            ->with('pubsub.google.project')
             ->once()
             ->andReturn('google-project-id');
 

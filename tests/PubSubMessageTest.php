@@ -68,7 +68,7 @@ class PubSubMessageTest extends \PHPUnit_Framework_TestCase
     /** @test */
     public function it_decodes_message_data()
     {
-        $message = $this->message->decode('{"herp": "derp"}');
+        $message = $this->message->decode(base64_encode('{"herp": "derp"}'));
 
         $this->assertEquals('derp', $message->herp);
     }

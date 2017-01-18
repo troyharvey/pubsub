@@ -20,10 +20,8 @@ class PubSub implements \GenTux\PubSub\Contracts\PubSub
     /** @var Repository */
     protected $config;
 
-    public function __construct(
-        Application $app,
-        Repository $config
-    ) {
+    public function __construct(Application $app, Repository $config)
+    {
         $this->app = $app;
         $this->config = $config;
     }
@@ -53,9 +51,7 @@ class PubSub implements \GenTux\PubSub\Contracts\PubSub
         $pubsub = new Google_Service_Pubsub($client);
 
         $pubSubMessage->setData(
-            base64_encode(
-                $message->encode($message->data)
-            )
+            $message->encodedData($message->data)
         );
 
         $pubSubMessage->setAttributes(
@@ -67,7 +63,7 @@ class PubSub implements \GenTux\PubSub\Contracts\PubSub
         $request->setMessages([$pubSubMessage]);
 
         return $pubsub->projects_topics->publish(
-            "projects/{$this->config->get('pubsub.project')}/topics/{$message->topic()}",
+            "projects/{$this->config->get('pubsub.google.project')}/topics/{$message->topic()}",
             $request
         );
     }
@@ -99,7 +95,7 @@ class PubSub implements \GenTux\PubSub\Contracts\PubSub
                  *
                  * @var string $messageData
                  */
-                $messageData = base64_decode($request->input('message.data'));
+                $messageData = $request->input('message.data');
                 $messageData = $messageClass::decode($messageData);
 
                 /** @var PubSubMessage $message */
@@ -110,7 +106,6 @@ class PubSub implements \GenTux\PubSub\Contracts\PubSub
             }
         }
 
-        // Oops. None of the $messages handle this Routing Key.
         throw PubSubRoutingKeyException::forThis($request);
     }
 }

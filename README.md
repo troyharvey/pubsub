@@ -91,7 +91,7 @@ If your app is publishing messages to a Pub/Sub topic, then you need to add Goog
 
 ### Subscriber Configuration
 
-1. Register the Pub/Sub middleware. This middleware uses your `PUB_SUB_SUBSCRIBER_TOKEN` to secure the subscription endpoint.
+1. Register the Pub/Sub middleware. This middleware uses your `PUBSUB_SUBSCRIBER_TOKEN` to secure the subscription endpoint.
 Any messages sent to your Pub/Sub endpoint without a token will be rejected.
 
     Add `pubsub` middleware to end of the `routeMiddleware` array in `Http\Kernel.php` for [Laravel](https://laravel.com/docs/master/middleware#assigning-middleware-to-routes) apps:
@@ -114,7 +114,7 @@ Any messages sent to your Pub/Sub endpoint without a token will be rejected.
 
 2. Generate a random string and add it to your `.env` file.
 
-        PUB_SUB_SUBSCRIBER_TOKEN=7RWfH4yxnXXsep5k3LpVxv7oSlnhyFPFeHda87i3Vc
+        PUBSUB_SUBSCRIBER_TOKEN=7RWfH4yxnXXsep5k3LpVxv7oSlnhyFPFeHda87i3Vc
 
 3. Add a `PubSubController` to your project.
 
