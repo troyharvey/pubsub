@@ -1,6 +1,6 @@
 {
     "name": "generationtux/pubsub",
-    "description": "A Lumen & Laravel package for Google Pub/Sub or Amazon SNS",
+    "description": "Simple Pub/Sub for Lumen & Laravel with drivers for Google Pub/Sub and Amazon SNS.",
     "type": "library",
     "license": "MIT",
     "authors": [
@@ -9,8 +9,10 @@
             "email": "troy.harvey@generationtux.com"
         }
     ],
+    "keywords": ["pubsub", "google", "amazon", "sns", "microservices", "cqrs", "message passing", "lumen", "laravel"],
     "minimum-stability": "stable",
     "require": {
+        "chrisbarr/amazon-sns-php-api": "^1.5",
         "google/apiclient": "^2.0"
     },
     "require-dev": {

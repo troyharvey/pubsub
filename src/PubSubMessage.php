@@ -42,18 +42,18 @@ abstract class PubSubMessage
      *
      * Override according to taste.
      *
-     * @param $data
-     *
      * @return string
      */
-    public function encode($data)
+    public function encodedData()
     {
-        return json_encode($data);
+        return base64_encode(
+            json_encode($this->data)
+        );
     }
 
     /**
      * Prior to instantiating a Message, subscribers decode the message
-     * payload in the `message.data` property. Typically the message data
+     * payload in the `message.data` property. Typically, the message data
      * attribute is JSON that is Base64 encoded. So, by default this decode
      * method just decodes the JSON.
      *
@@ -65,7 +65,9 @@ abstract class PubSubMessage
      */
     public static function decode($data)
     {
-        return json_decode($data);
+        return json_decode(
+            base64_decode($data)
+        );
     }
 
     /**

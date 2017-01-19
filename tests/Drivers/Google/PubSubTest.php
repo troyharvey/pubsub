@@ -31,16 +31,18 @@ class PubSubTest extends \PHPUnit_Framework_TestCase
     protected $response;
 
     /** @var PubSub */
-    protected $client;
+    protected $driver;
 
     public function setUp()
     {
+        parent::setUp();
+
         $this->app = Mockery::mock(Application::class);
         $this->config = Mockery::mock(Repository::class);
         $this->response = Mockery::mock(ResponseFactory::class);
         $this->log = Mockery::mock(Log::class);
 
-        $this->client = new PubSub(
+        $this->driver = new PubSub(
             $this->app,
             $this->config
         );
@@ -58,7 +60,7 @@ class PubSubTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf(
             \GenTux\PubSub\Contracts\PubSub::class,
-            $this->client,
+            $this->driver,
             'The Google PubSub client does not implement the PubSub interface.'
         );
     }
@@ -78,7 +80,7 @@ class PubSubTest extends \PHPUnit_Framework_TestCase
 
         $this->config
             ->shouldReceive('get')
-            ->with('pubsub.project')
+            ->with('pubsub.google.project')
             ->once()
             ->andReturn('google-project-id');
 
@@ -87,7 +89,7 @@ class PubSubTest extends \PHPUnit_Framework_TestCase
             'lastName' => 'Testerton',
         ]);
 
-        $this->client->publish($message);
+        $this->driver->publish($message);
     }
 
     /** @test */
@@ -119,8 +121,7 @@ class PubSubTest extends \PHPUnit_Framework_TestCase
             ->with('Response')
             ->andReturn($this->response);
 
-        /** @var PubSubMessage $message */
-        $actualResponse = $this->client->subscribe(
+        $actualResponse = $this->driver->subscribe(
             $request,
             [
                 AccountsCustomerCreatedMessage::class
@@ -147,7 +148,7 @@ class PubSubTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException(PubSubRoutingKeyException::class);
         
         /** @var PubSubMessage $message */
-        $this->client->subscribe(
+        $this->driver->subscribe(
             $request,
             [
                 AccountsCustomerCreatedMessage::class
@@ -174,7 +175,7 @@ class PubSubTest extends \PHPUnit_Framework_TestCase
             'Herp derper.'
         );
 
-        $this->client->subscribe(
+        $this->driver->subscribe(
             $request,
             [
                 HandleThrowsExceptionMessage::class

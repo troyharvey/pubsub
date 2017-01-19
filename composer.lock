@@ -4,9 +4,46 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "d6924b429ef42e1bde728deae6392a96",
-    "content-hash": "7cbd34dc73302ef0f981abeea9eeb7a0",
+    "hash": "e78139280fcf0262b9b2ecc21262db3c",
+    "content-hash": "2cb06a13292fee146144c5bb8cf08c3a",
     "packages": [
+        {
+            "name": "chrisbarr/amazon-sns-php-api",
+            "version": "1.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/chrisbarr/AmazonSNS-PHP-API.git",
+                "reference": "59a5e5926382564fd0d68b9d74c1485160e49825"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/chrisbarr/AmazonSNS-PHP-API/zipball/59a5e5926382564fd0d68b9d74c1485160e49825",
+                "reference": "59a5e5926382564fd0d68b9d74c1485160e49825",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "AmazonSNS": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Chris Barr",
+                    "email": "chris.barr@ntlworld.com"
+                }
+            ],
+            "description": "Amazon SNS PHP API",
+            "homepage": "https://github.com/chrisbarr/AmazonSNS-PHP-API",
+            "time": "2016-08-18 09:00:29"
+        },
         {
             "name": "firebase/php-jwt",
             "version": "v3.0.0",

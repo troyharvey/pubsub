@@ -2,7 +2,8 @@
 
 namespace GenTux\PubSub;
 
-use Illuminate\Config\Repository;
+use GenTux\PubSub\Exceptions\PubSubDriverNotDefinedException;
+use Illuminate\Contracts\Config\Repository;
 use Illuminate\Support\ServiceProvider;
 
 class PubSubServiceProvider extends ServiceProvider
@@ -14,13 +15,22 @@ class PubSubServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->mergeConfigFrom(__DIR__.'/config.php', 'pubsub');
+        $this->mergeConfigFrom(
+            realpath(dirname(__FILE__)) . '/config.php',
+            'pubsub'
+        );
 
         $this->app->singleton(
             Contracts\PubSub::class,
             function ($app) {
-                $config = $app->make(Repository::class);
-                $driver = $config->get('pubsub.driver', 'google');
+                /** @var Repository $config */
+                $config = $app->make('config');
+                $driver = $config->get('pubsub.driver');
+
+                if (empty($driver)) {
+                    throw new PubSubDriverNotDefinedException();
+                }
+
                 $driver = ucfirst(camel_case($driver));
 
                 return $app->make("\\GenTux\\PubSub\\Drivers\\{$driver}\\PubSub");
