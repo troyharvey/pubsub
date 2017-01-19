@@ -37,9 +37,9 @@ class PubSub implements \GenTux\PubSub\Contracts\PubSub
             $this->config->get('pubsub.amazon.secretAccessKey')
         );
 
-        $arn = $this->findTopic($sns, $message->topic());
+        $arn = $this->findTopic($sns->listTopics(), $message->topic());
 
-        $sns->publish(
+        return $sns->publish(
             $arn,
             $message->encodedData(),
             $message::$routingKey
@@ -87,7 +87,7 @@ class PubSub implements \GenTux\PubSub\Contracts\PubSub
      *
      * @return bool
      */
-    protected function confirmingSubscription($message)
+    public function confirmingSubscription($message)
     {
         if ($message->Type == self::SUBSCRIPTION_CONFIRMATION) {
             $this->app
@@ -104,16 +104,16 @@ class PubSub implements \GenTux\PubSub\Contracts\PubSub
      * Find the full Amazon Resource Name (ARN) for a topic
      * in a list of all topics.
      *
-     * @param AmazonSNS $sns   SNS client
-     * @param string    $topic Suffix of the Topic ARN
+     * @param array  $topics SNS topics
+     * @param string $topic  Suffix of the Topic ARN
      *
      * @return string Amazon Topic ARN
      *
      * @throws PubSubTopicNotDefinedException
      */
-    protected function findTopic(AmazonSNS $sns, $topic)
+    public function findTopic($topics, $topic)
     {
-        foreach ($sns->listTopics() as $arn) {
+        foreach ($topics as $arn) {
             if (stripos($arn['TopicArn'], $topic)) {
                 return $arn['TopicArn'];
             }

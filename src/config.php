@@ -4,8 +4,8 @@ return [
     'driver' => env('PUBSUB_DRIVER', 'google'),
 
     'amazon' => [
-        'accessKeyId' => env('PUBSUB_AWS_ACCESS_KEY_ID'),
-        'secretAccessKey' => env('PUBSUB_AWS_SECRET_ACCESS_KEY'),
+        'accessKeyId' => env('AWS_ACCESS_KEY_ID'),
+        'secretAccessKey' => env('AWS_SECRET_ACCESS_KEY'),
     ],
 
     'google' => [

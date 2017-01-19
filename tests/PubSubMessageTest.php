@@ -73,12 +73,13 @@ class PubSubMessageTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('derp', $message->herp);
     }
 
+    /** @test */
     public function it_encodes_message_data()
     {
-        $data = new \stdClass();
-        $data->herp = 'derp';
+        $this->message->data = new \stdClass();
+        $this->message->data->herp = 'derp';
 
-        $message = $this->message->encode($data);
-        $this->assertEquals('{"herp": "derp"}', $message);
+        $message = $this->message->encodedData();
+        $this->assertEquals(base64_encode(json_encode($this->message->data)), $message);
     }
 }
